@@ -12,6 +12,7 @@
 //global constant
 #define NUM_CELL 4
 #define NUM_CH	3
+#define MAX_H 8
 #define MAX_TIME_CALL 180;
 #define NUM_ADJ 2
 //global variables
@@ -25,6 +26,7 @@ double lambdaLoad,stayMeanTime;
 Record *calls[NUM_CELL][NUM_CH];
 int channells[NUM_CH];
 int adj_cells[NUM_CELL][NUM_ADJ]
+int histo[MAX_H];
 
 
  void schedule(int type, Time time,int station,int cell, int channell){
@@ -123,6 +125,7 @@ int handover(int cell_src,int ch_src){
 		drop_call_on_hand++;
 		//remove the end_call event for this call 
 		remove_event(&event_list,END_CALL,cell_src,ch_src);
+		release_record(rec);
 		return;
 	}
 	channells[cell_dst]++;
@@ -136,7 +139,30 @@ int handover(int cell_src,int ch_src){
 
 }
 
-void risultati(void){
+int end_call(int cell,int ch){
+	Record *rec;
+	channells[cell]--;
+	rec=calls[cell][ch];
+	calls[cell][ch]=NULL;
+	tot_call_ok++;
+	rec->num_hand
+	histo[rec->num_hand<MAX_H:rec->num_hand?MAX_H-1]++;
+	release_record(rec);
+}
+
+
+void results(void){
+	
+	printf("Total calls:%d\n",tot_calls);
+	printf("Total blocked calls:%d\n",drop_calls);
+	printf("Blocked calls probability:%f\n",drop_calls*1.0/tot_calls);
+	printf("Total interrupted calls:%d\n",drop_calls_on_hand);
+	printf("Interrupted calls probability:%f\n",drop_calls_on_hand*1.0/tot_calls);
+	
+	printf("Histogram\n");
+	for(i=0;i<MAX_H;i++){
+		printf("handover %d call %d	\n",i,histo[i]);
+	}
 	exit(0);
 }
 
@@ -204,7 +230,7 @@ while (current_time<maximum){
 	 //destroy the event removed from the event_list
     release_event(ev);
   } //end event loop
-   risultati();
+   results();
    fclose(file);
 return 0;
 }
