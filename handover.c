@@ -13,6 +13,7 @@
 #define NUM_CELL 4
 #define NUM_CH	3
 #define MAX_TIME_CALL 180;
+#define NUM_ADJ 2
 //global variables
 long seme1 = 14123451,
      seme2 =57645805;
@@ -22,6 +23,7 @@ FILE *file;
 double lambdaLoad,stayMeanTime;
 Record *calls[NUM_CELL][NUM_CH];
 int channells[NUM_CH];
+int adj_cells[NUM_CELL][NUM_ADJ]
 
 
  void schedule(int type, Time time,int station,int cell, int channell){
@@ -97,6 +99,8 @@ return 0;
 }
 
 
+
+
 int main(){
 int i,j;
 Event *ev;
@@ -131,6 +135,9 @@ for(i=0;i<NUM_CELL;i++){
 	delta= negexp(1/lambdaLoad,&seme1)
 	schedule(CALL,current_time+delta,i,0); 
 }
+//initialize the matrix with the adjancent cells
+//TO DO
+
 //end initialize all the variables and the events
 
 while (current_time<maximum){
