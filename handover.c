@@ -12,6 +12,7 @@
 //global constant
 #define NUM_CELL 4
 #define NUM_CH	3
+#define MAX_TIME_CALL 180;
 //global variables
 long seme1 = 14123451,
      seme2 =57645805;
@@ -51,7 +52,49 @@ void get_input(char *format,void *variable){
 void risultati(void){
 	exit(0);
 }
+/*return the first free channell for this cell*/
+int find_free_ch(int cell){
+	int i=0;
+	for(i=0;i<NUM_CH;i++){
+		if(calls[cell][i]==NULL){
+			return i;
+		}
+	}
+	
+}
 
+int call(int cell, int ch){
+tot_call++;
+delta=poisson(1/lambdaLoad,&seme1);
+schedule(CALL,current_time+delta,cell,0);
+Record *rec;
+double handover_time,end_call_time;
+
+int ch=0;
+if(channells[cell]==NUM_CH){
+	//drop the call
+	drop_calls++;
+}else{
+	ch=find_free_ch(cell);
+	rec=new_record();
+	rec->cell=cell;
+	rec->ch=ch;
+	rec->num_hand=0;
+	channells[cell]++;
+	calls[cell][ch]=rec;
+	
+	handover_time=poisson(1/stayMeanTime,&seme2);
+	end_call_time=uniform01(&seme2)*MAX_TIME_CALL;//FIX ME
+	
+	if((current_time+handover_time)<(current_time+end_call_time)){
+		//schedule a handover
+		schedule(HANDOVER,current_time+handover_time,cell,ch);
+	}
+	schedule(END_CALL,current_time+end_call_time,cell,ch);
+}
+
+return 0;
+}
 
 
 int main(){
@@ -86,7 +129,7 @@ tot_calls=0;
 tot_calls_ok=0;
 for(i=0;i<NUM_CELL;i++){
 	delta= negexp(1/lambdaLoad,&seme1)
-	schedule(CALL,current_time+delta,i,0);
+	schedule(CALL,current_time+delta,i,0); 
 }
 //end initialize all the variables and the events
 

@@ -22,7 +22,7 @@ struct event_unit
 	int   type;     /* Tipo di evento, da definire volta per volta */
 
     int cell;		/*the id of che cell*/
-	int channel		/*the id of the channnell for this cell*/
+	int channel;	/*the id of the channnell for this cell*/
       };
 
 /* Prototipi */
