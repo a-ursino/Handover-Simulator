@@ -16,6 +16,19 @@ long seme1 = 14123451,
 Time current_time;
 
 
+ void schedule(int type, Time time,int station,int cell, int channell){
+   Event *ev;
+   ev=new_event();
+   ev->type=type;
+   ev->time=time;
+   ev->cell=cell;
+   ev->channell=channell;
+   insert_event(&event_list,ev);
+   return;
+}
+
+
+
 int main(){
 
 
