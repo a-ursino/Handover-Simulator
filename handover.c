@@ -99,7 +99,33 @@ return 0;
 }
 
 
+int handover(int cell_src,int ch_src){
+	double handover_time;
+	int cell_dst;
+	Record *rec;
+	rec=calls[cell_src][ch_src];
+	calls[cell_src][ch_src]=NULL;
+	channells[cell_src]--;
+	rec->num_hand++;
+	//find a new cell among the adj cells
+	cell_dst=adj_cells[cell_src][(int)floor(uniform01(&seme)*NUM_ADJ)]	
+	if(channells[cell_dst]==NUM_CH){
+		//drop_the call on handover
+		drop_call_on_hand++;
+		//remove the end_call event for this call 
+		remove_event(END_CALL,cell_src,ch_src);
+		return;
+	}
+	channells[cell_dst]++;
+	calls[cell_dst][ch_dst]=rec;
+	handover_time=poisson(1/stayMeanTime,&seme2);
+	if(current_time+handover_time<rec->end_call){
+		cell_src=cell_dst;
+		ch_src=ch_dst;
+		schedule(HANDOVER,current_time+handover_time,cell_src,ch_src)
+	}
 
+}
 
 int main(){
 int i,j;
@@ -127,8 +153,8 @@ for(i=0;i<NUM_CELL;i++){
 	}
 	
 }
-drop_calls=0;
-drop_calls_on_hand=0;
+drop_calls=0;//drop the call on start call
+drop_calls_on_hand=0;//drop the call while trying to make an handover
 tot_calls=0;
 tot_calls_ok=0;
 for(i=0;i<NUM_CELL;i++){
