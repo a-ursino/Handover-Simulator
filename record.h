@@ -13,6 +13,7 @@ struct record_unit
   { 
     Record *next;
     Time  arrival;
+	Time  end_call;
 	int cell;
 	int ch;
 	int num_hand;
