@@ -10,7 +10,8 @@
 #define HANDOVER 2
 #define END_CALL 3
 //global constant
-
+#define NUM_CELL 4
+#define NUM_CH	3
 //global variables
 long seme1 = 14123451,
      seme2 =57645805;
@@ -18,6 +19,9 @@ long seme1 = 14123451,
 Time current_time;
 FILE *file;
 double lambdaLoad,stayMeanTime;
+Record *calls[NUM_CELL][NUM_CH];
+int channells[NUM_CH];
+
 
  void schedule(int type, Time time,int station,int cell, int channell){
    Event *ev;
@@ -51,10 +55,10 @@ void risultati(void){
 
 
 int main(){
-
+int i,j;
 Event *ev;
 Time maximum,last_event_time;
-
+double delta=0;
 printf("Insert the lambda value for the traffic load\n");
 get_input("%lf",&lambdaLoad);
 printf("Insert the mean time value for cell's stay\n");
@@ -68,7 +72,23 @@ printf("The simulation's max time is %f\n",maximum);
 file = fopen("simulationData.csv","w");
 //fprintf(file,"# %s","Time,\tArrivo_Pkt,\tEnd_Tx,\tArrivo_token,\tDropped_Pkt\n");
 
-
+//initialize all the variables and the events
+for(i=0;i<NUM_CELL;i++){
+	channells[i]=0;
+	for(j=0;j<NUM_CH;j++){
+		calls[i][j]=NULL;
+	}
+	
+}
+drop_calls=0;
+drop_calls_on_hand=0;
+tot_calls=0;
+tot_calls_ok=0;
+for(i=0;i<NUM_CELL;i++){
+	delta= negexp(1/lambdaLoad,&seme1)
+	schedule(CALL,current_time+delta,i,0);
+}
+//end initialize all the variables and the events
 
 while (current_time<maximum){
 	//remove the event from the event_list
