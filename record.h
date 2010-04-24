@@ -13,6 +13,9 @@ struct record_unit
   { 
     Record *next;
     Time  arrival;
+	int cell;
+	int ch;
+	int num_hand;
   };
 
 /* Prototipi */
