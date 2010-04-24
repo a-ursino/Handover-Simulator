@@ -21,7 +21,8 @@ struct event_unit
 			   dell'evento */
 	int   type;     /* Tipo di evento, da definire volta per volta */
 
-    int station;
+    int cell;		/*the id of che cell*/
+	int channel		/*the id of the channnell for this cell*/
       };
 
 /* Prototipi */
