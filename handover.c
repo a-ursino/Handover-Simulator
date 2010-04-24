@@ -6,7 +6,9 @@
 #include "simtime.h"
 #include <math.h>
 //code event
-
+#define CALL 1
+#define HANDOVER 2
+#define END_CALL 3
 //global constant
 
 
@@ -44,6 +46,19 @@ void get_input(char *format,void *variable){
 int main(){
 
 
+while (current_time<maximum){
+	//remove the event from the event_list
+    ev = get_event(&event_list);
+    last_event_time = current_time;
+    current_time = ev->time;
+    //"Time,Arrivo_Pkt,End_Tx,Arrivo_token"
+    switch (ev->type){
 
+       default:       printf("Orrore!!!\n");
+		      exit(1);
+     }
+	 //destroy the event removed from the event_list
+    release_event(ev);
+  }
 return 0;
 }
