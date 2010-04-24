@@ -19,6 +19,7 @@ long seme1 = 14123451,
      seme2 =57645805;
 	 
 Time current_time;
+Event *event_list = NULL;
 FILE *file;
 double lambdaLoad,stayMeanTime;
 Record *calls[NUM_CELL][NUM_CH];
@@ -51,9 +52,7 @@ void get_input(char *format,void *variable){
 					/* input line.			    */
 }
 
-void risultati(void){
-	exit(0);
-}
+
 /*return the first free channell for this cell*/
 int find_free_ch(int cell){
 	int i=0;
@@ -61,6 +60,16 @@ int find_free_ch(int cell){
 		if(calls[cell][i]==NULL){
 			return i;
 		}
+	}
+	
+}
+
+int remove_event(Event **last,int type_event,int cell,int ch){
+	//loop on events list
+	Event *evt=NULL,*evt_temp=NULL;
+	if(*last==NULL){
+		//empty list	
+		return;
 	}
 	
 }
@@ -113,7 +122,7 @@ int handover(int cell_src,int ch_src){
 		//drop_the call on handover
 		drop_call_on_hand++;
 		//remove the end_call event for this call 
-		remove_event(END_CALL,cell_src,ch_src);
+		remove_event(&event_list,END_CALL,cell_src,ch_src);
 		return;
 	}
 	channells[cell_dst]++;
@@ -125,6 +134,10 @@ int handover(int cell_src,int ch_src){
 		schedule(HANDOVER,current_time+handover_time,cell_src,ch_src)
 	}
 
+}
+
+void risultati(void){
+	exit(0);
 }
 
 int main(){
