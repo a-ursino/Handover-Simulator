@@ -96,8 +96,8 @@ if(channells[cell]==NUM_CH){
 	channells[cell]++;
 	calls[cell][ch]=rec;
 	
-	handover_time=poisson(1/stayMeanTime,&seme2);
-	end_call_time=uniform01(&seme2)*MAX_TIME_CALL;//FIX ME
+	handover_time=poisson(stayMeanTime,&seme2);
+	end_call_time=poisson(MAX_TIME_CALL,&seme2);
 	
 	if((current_time+handover_time)<(current_time+end_call_time)){
 		//schedule a handover
@@ -130,7 +130,7 @@ int handover(int cell_src,int ch_src){
 	}
 	channells[cell_dst]++;
 	calls[cell_dst][ch_dst]=rec;
-	handover_time=poisson(1/stayMeanTime,&seme2);
+	handover_time=poisson(stayMeanTime,&seme2);
 	if(current_time+handover_time<rec->end_call){
 		cell_src=cell_dst;
 		ch_src=ch_dst;
